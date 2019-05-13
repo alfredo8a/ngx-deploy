@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+try {
+  process.title = 'ngx-deploy ' + Array.from(process.argv).slice(2).join(' ');
+} catch(_) {
+  // If an error happened above, use the most basic title.
+  process.title = 'ngx-deploy';
+}
+require('../src/index');
