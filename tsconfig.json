@@ -11,7 +11,7 @@
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false,
-    "noImplicitThis": true,
+    "noImplicitThis": false,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "rootDir": "src/",

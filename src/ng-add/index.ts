@@ -1,57 +1,41 @@
 import { Rule, SchematicContext, Tree, chain } from '@angular-devkit/schematics';
-import { getWorkspace, getProjectFromWorkspace, getProjectTargets } from 'schematics-utilities';
-// import { getWorkspace, getProjectFromWorkspace, getProjectTargets, getWorkspacePath } from 'schematics-utilities';
+import { getWorkspace, getProjectFromWorkspace } from 'schematics-utilities';
 
 export default function (): Rule {
   return chain([
     createDeployEnviroments(),
-    // updateFileReplacements(),
-
   ]);
 }
-// function updateFileReplacements(): Rule {
-//   return (host: Tree, _context: SchematicContext) => {
-//     const workspace = getWorkspace(host);
-//     // const recorder : UpdateRecorder = {insertLeft(),insertRight()}
-//     // appendPropertyInAstObject({insertLeft(0,'deploy')},workspace,'architect')
-//     const project = getProjectFromWorkspace(workspace, workspace['defaultProject']);
-//     var targets = getProjectTargets(project);
 
-//     targets.map(target => target.configurations).map(config => {
-//       config.fileReplacements.push()
-//     })
-//     host.overwrite(getWorkspacePath(host), JSON.stringify(workspace, null, 2));
-
-//     // addProjectToWorkspace(workspace,'deploy',project)
-//     // console.log(targets);
-
-//     return host;
-//   };
-// }
+const sourcePath = (project, item): string => {
+  return item === 'dev' ? project.options.outputPath : project.configurations[item].outputPath;
+}
+const destPath = (project, item) => {
+  const sp = sourcePath(project, item).split('/');
+  return sp.pop();
+}
 
 function createDeployEnviroments(): Rule {
   return (tree: Tree, context: SchematicContext) => {
     const workspace = getWorkspace(tree);
-    const project = getProjectFromWorkspace(workspace);
-    const targets = getProjectTargets(project);
-
-    const keys = Object.keys(targets.build.configurations);
-    const arrayJson = {}
-    keys.forEach(key => {
-      arrayJson[key] = {
-        source: targets.build.configurations[key].outputPath,
+    const architect: any = getProjectFromWorkspace(workspace).architect;
+    const project = architect.build;
+    const configs = Object.keys(project.configurations);
+    configs.unshift('dev');
+    let array = {};
+    configs.map(item => {
+      return array[item] = {
+        source: sourcePath(project, item),
+        dest: destPath(project, item),
         host: '',
         user: '',
-        password: '',// Optional if privateKey = true
-        privateKey: false,
         path: ''
       }
     });
-
     if (!tree.exists('src/environments/deploy.json')) {
-      tree.create('src/environments/deploy.json', JSON.stringify(arrayJson, null, '\t'));
+      tree.create('src/environments/deploy.json', JSON.stringify(array, null, '\t'));
     } else {
-      context.logger.error('FILE EXIST ' + 'src/environments/deploy.json');
+      context.logger.error("FILE EXIST 'src/environments/deploy.json'");
     }
     return tree;
   };
