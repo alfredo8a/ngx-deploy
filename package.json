@@ -1,17 +1,16 @@
 {
   "name": "ngx-deploy",
-  "version": "0.0.0",
-  "description": "A blank schematics",
+  "version": "1.0.0",
+  "description": "Deploy Angular project to hosting server using ssh",
   "main": "src/index.js",
   "scripts": {
-    "start": "npm run build && schematics .:ng-add --dry-run=false",
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && jasmine src/**/*_spec.js"
   },
   "keywords": [
     "schematics"
   ],
-  "author": "",
+  "author": "I.T Alfredo Ochoa Lopez",
   "license": "MIT",
   "schematics": "./src/collection.json",
   "bin": {

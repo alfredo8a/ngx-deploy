@@ -1,27 +1,31 @@
-# Getting Started With Schematics
+# Deploy project to hosting server
 
-This repository is a basic Schematic implementation that serves as a starting point to create and publish Schematics to NPM.
+This is a console command for deploy your aungular project to a hosting server.
 
-### Testing
+### Install
 
-To test locally, install `@angular-devkit/schematics-cli` globally and use the `schematics` command line tool. That tool acts the same as the `generate` command of the Angular CLI, but also has a debug mode.
-
-Check the documentation with
+You only need run 
 ```bash
-schematics --help
+ng add ngx-deploy
+```
+this will make a new file where you should put que config of hosting server for each environments, this configuration is taken of your angular application.
+
+```
+src/enviroments/deploy.json
+"dev": {
+		"source": "dist/folder",    <-- this automaticaly set 
+		"dest": "folder",           <-- this automaticaly set 
+		"host": "",                 <-- you can use ip or dns
+		"user": "",                 <-- user for connect 
+		"path": ""                  <-- htdocs path in server
+	}
 ```
 
-### Unit Testing
-
-`npm run test` will run the unit tests, using Jasmine as a runner and test framework.
-
-### Publishing
-
-To publish, simply do:
-
+### Deploy
+Inside folder run
 ```bash
-npm run build
-npm publish
+ngx-deploy          <-- deploy DEV
+ngx-deploy -c env   <-- especific ENV to deploy 
 ```
 
 That's it!
