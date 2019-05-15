@@ -35,6 +35,8 @@ function run() {
     log(error(`Config is not complete for ${env.toUpperCase()} environment or dont exist, check file 'src/environments/deploy.json'`))
     process.exit(0);
   }
+  log(info(`Deploying ...`));
+
   const rsync = new Rsync()
     .shell('ssh')
     .flags('avzhr')
@@ -42,9 +44,9 @@ function run() {
     .source(`${config.source}/*`)
     .destination(`${config.user}@${config.host}:${config.path}/${config.dest}/`);
 
-  rsync.execute(function (error, code, _cmd) {
-    if (error) {
-      log(error(code, error))
+  rsync.execute(function (err, code, _cmd) {
+    if (err) {
+      log(error(code, err))
     } else {
       log(info("Project deployed !"))
     }
