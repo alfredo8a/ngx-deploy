@@ -40,7 +40,7 @@ function run() {
     .flags('avzhr')
     .delete()
     .source(`${config.source}/*`)
-    .destination(`${config.user}@${config.host}:${config.path}`);
+    .destination(`${config.user}@${config.host}:${config.path}/${config.dest}/`);
 
   rsync.execute(function (error, code, _cmd) {
     if (error) {
